@@ -26,6 +26,8 @@ public class EurekaStateChangeListener
 	private String mqip;
 	@Value("${msabot.mqport}")
 	private int mqport;
+	@Value("${msabot.routingKey}")
+    private String routingKey;
 	
 	private MSABotSender sender = new MSABotSender();
 	
@@ -36,7 +38,8 @@ public class EurekaStateChangeListener
         String appName = event.getAppName();
         String serverId = event.getServerId();
         System.out.println(">>>>>>>>>>>>>>> Service Failed : " + serverId + " , already removed!");
-		sender.send(mqip, mqport, roomID, appName.toString(), "Failed");
+//		sender.send(mqip, mqport, roomID, appName.toString(), "Failed");
+        sender.send(mqip, mqport, routingKey, appName.toString(), "Failed");
     }
  
     @EventListener
@@ -57,7 +60,8 @@ public class EurekaStateChangeListener
     public void listen(EurekaRegistryAvailableEvent event) 
 	{
 		System.out.println(">>>>>>>>>>>>>>> Server Registry Start!");
-		sender.send(mqip, mqport, roomID, "Eureka Server", "Server Registry Start");
+//		sender.send(mqip, mqport, roomID, "Eureka Server", "Server Registry Start");
+        sender.send(mqip, mqport, routingKey, "Eureka Server", "Server Registry Start");
     }
  
     @EventListener
@@ -65,6 +69,7 @@ public class EurekaStateChangeListener
 	{
         //Server start
 		System.out.println(">>>>>>>>>>>>>>> Server Start!");
-		sender.send(mqip, mqport, roomID, "Eureka Server", "Server Start");
+//		sender.send(mqip, mqport, roomID, "Eureka Server", "Server Start");
+        sender.send(mqip, mqport, routingKey, "Eureka Server", "Server Start");
     }
 }
